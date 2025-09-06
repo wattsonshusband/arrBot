@@ -15,6 +15,7 @@ dotenv
 ## DOT ENV contents
 So this script does use dotenv to hold specific variables which shouldn't be accessed normally.
 
+<code>
 BOT_TOKEN=
 PREFIX=r.
 OWNER_ID=
@@ -22,6 +23,7 @@ BASE_URL=
 RADARR_KEY=
 SONARR_KEY=
 TMDB_API=
+</code>
 
 Prefix can be moved but I don't want it to be changed from me doing something stupid. so yeah.
 
