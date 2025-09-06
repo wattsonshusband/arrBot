@@ -9,7 +9,7 @@ This code is MID at best, so if you find any memory leaks or stuff then make a b
 ## Dependences
 Node.js - kinda obvious.
 
-discord.js, dotenv
+discord.js, dotenv, axios
 
 ## DOT ENV contents
 So this script does use dotenv to hold specific variables which shouldn't be accessed normally.
