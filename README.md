@@ -22,6 +22,7 @@ So this script does use dotenv to hold specific variables which shouldn't be acc
 <code>SONARR_KEY=</code><br>
 <code>TMDB_API=</code><br>
 
-Prefix can be moved but I don't want it to be changed from me doing something stupid. so yeah.
+Prefix can be moved but I don't want it to be changed from me doing something stupid. so yeah.<br><br>
+The only thing that is really hardcoded is the Quality Profile that Radarr and Sonarr use but this is defaulted to HD - 720p/1080p so that should be universal.
 
 Anyway have a good day.
