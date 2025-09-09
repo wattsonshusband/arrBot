@@ -1,5 +1,6 @@
 const axios = require('axios');
 
+const statuses = ['downloading', 'queued']
 function get_downloading_sonarr(client, page = 1, page_size = 10) {
  return new Promise(async (res, rej) => {
   try {
@@ -17,10 +18,8 @@ function get_downloading_sonarr(client, page = 1, page_size = 10) {
     }
    });
 
-   console.log(resp.data.records)
-
    const downloading = (resp.data.records || []).filter(
-    r => r.status === 'downloading'
+    r => statuses.includes(r.status)
    );
 
    return res(downloading);
@@ -48,7 +47,7 @@ function get_downloading_radarr(client, page = 1, page_size = 10) {
    });
 
    const downloading = (resp.data.records || []).filter(
-    r => r.status === 'downloading'
+    r => statuses.includes(r.status)
    );
    
    return res(downloading);
