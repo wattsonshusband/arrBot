@@ -1,5 +1,7 @@
 const axios = require('axios');
+const { tmdb_search } = require('./tmdb_search');
 const { get_root_folder_radarr, get_root_folder_sonarr } = require('./root_folder');
+const movie = require('../commands/movie');
 
 async function forward_to_radarr(client, msg, tmdbId, movie_name) {
  try{
@@ -13,9 +15,22 @@ async function forward_to_radarr(client, msg, tmdbId, movie_name) {
    console.error("Radarr lookup failed:", err.response?.data || err.message);
   }
 
-  let movie_data = lookup?.data[0];
+  let movie_data = lookup?.data;
   if (!movie_data || movie_data.length == 0) {
+   try {
+    const res = await axios.get(`${client.radarr_url}/api/v3/movie/lookup/imdb`, {
+     params: { imdbId },
+     headers: { "X-Api-Key": client.radarr_api },
+    });
+    movie_data = res.data || [];
+   } catch (err) {
+    console.error("Radarr IMDb lookup failed:", err.response?.data || err.message);
+   }
+  }
+
+  if(!movie_data || movie_data.length == 0){
    const lookup_msg = await msg.channel.send(`Sorry, couldn't find that exact movie in Radarr's lookup. Trying a name search...`);
+   client.delete_msg(lookup_msg, 10000);
    console.log(`Fallback to name lookup: ${movie_name}`);
    try {
     const name_lookup = await axios.get(`${client.radarr_url}/api/v3/movie/lookup`, {
@@ -32,6 +47,8 @@ async function forward_to_radarr(client, msg, tmdbId, movie_name) {
    client.delete_msg(msg.reply(`I couldn't find that movie in Radarr's lookup.`), 15000);
    return
   }
+
+  if(typeof(movie_data) == 'object' && !Array.isArray(movie_data))movie_data = [movie_data];
 
   let sel_movie;
   if (movie_data.length === 1) {
@@ -105,7 +122,13 @@ async function forward_to_radarr(client, msg, tmdbId, movie_name) {
   return msg.reply(`something went wrong when I tried to add that movie...`)
  }catch(error){
   console.error("Radarr error:", error.response?.data || error.message);
-  return msg.reply(`something big broke when I tried to search or add that movie...`)
+  if(error.response[0]?.errorCode == "MovieExistsValidator"){
+   const exists_msg = msg.reply(`that movie already exists in Radarr.`);
+   client.delete_msg(exists_msg, 15000);
+   return;
+  }else{
+   return msg.reply(`something big broke when I tried to search or add that movie...`)
+  }
  }
 }
 
@@ -209,7 +232,13 @@ async function forward_to_sonarr(client, msg, tvdbId, tv_name) {
   return msg.reply(`something went wrong when I tried to add that series...`)
  }catch(error){
   console.error("Sonarr error:", error.response?.data || error.message);
-  return msg.reply(`something big broke when I tried to search or add that series...`)
+  if(error.response[0]?.errorCode == "SeriesExistsValidator"){
+   const exists_msg = msg.reply(`that series already exists in Sonarr.`);
+   client.delete_msg(exists_msg, 15000);
+   return;
+  }else{
+   return msg.reply(`something big broke when I tried to search or add that series...`)
+  }
  }
 }
 

@@ -32,7 +32,8 @@ module.exports = {
 
    collector.on("end", (collected) => {
     if (collected.size === 0) {
-     client.delete_msg(msg.channel.send("⏳ No one picked a movie."), 5000);
+     const timeout_msg = msg.channel.send("⏳ No one picked a movie.");
+     client.delete_msg(timeout_msg, 5000);
     }
 
     client.delete_msg(sent_msg, 15000);
