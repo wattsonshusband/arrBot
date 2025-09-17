@@ -26,8 +26,6 @@ module.exports = {
       let time_left = 'N/A', size_left = 'N/A';
       if(item.timeleft && item.timeleft != '00:00:00'){ time_left = new Date(item.timeleft * 1000).toISOString().substring(11, 19) }
       if(item.sizeleft && item.sizeleft != 0){ size_left = (item.sizeleft / (1024 * 1024)).toFixed(2) + ' MB' }
-
-      console.log(time_left, size_left);
       reply_msg += `- ${item.series.title} S${item.seasonNumber}E${item.episode.episodeNumber} | ${item.episode.title} - ${size_left} left - ETA: ${time_left}\n`;
      });
     }

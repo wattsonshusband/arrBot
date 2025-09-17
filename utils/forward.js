@@ -1,7 +1,5 @@
 const axios = require('axios');
-const { tmdb_search } = require('./tmdb_search');
 const { get_root_folder_radarr, get_root_folder_sonarr } = require('./root_folder');
-const movie = require('../commands/movie');
 
 async function forward_to_radarr(client, msg, tmdbId, movie_name) {
  try{
