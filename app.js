@@ -44,8 +44,8 @@ async function server_health() {
 }
 
 async function change_presence(){
-  let is_on = await server_health() ? "ONLINE" : "OFFLINE";
-  client.user.setPresence({ activities: [{ name: `Containers are ${is_on}`, type: 3}], status: 'idle'})
+  let is_on = await server_health() ? "Sarai II & Callum playing" : "Sarai II & Callum sleeping";
+  client.user.setPresence({ activities: [{ name: is_on, type: 3}], status: 'idle'})
   let randomise_time = Math.floor(Math.random() * 8000) + 7000; 
   setTimeout(change_presence, randomise_time);
 }
